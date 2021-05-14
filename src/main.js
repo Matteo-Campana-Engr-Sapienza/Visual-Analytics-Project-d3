@@ -16,8 +16,10 @@ window.onload = () => {
     function resizeHandler() {
       d3.select("#circle-packing-container").select("*").remove().exit()
       d3.select("#top10Movies").select("*").remove().exit()
+      d3.select("#scatterPlotPCA").select("*").remove().exit()
       drawCirclePacking(data)
       top10Movies(data)
+      drawScatterPlotPCA(data)
     }
 
     var rtime;
@@ -37,8 +39,8 @@ window.onload = () => {
       } else {
         timeout = false;
         //alert('Done resizing');
-        console.log('Done resizing')
-        //resizeHandler()
+        //console.log('Done resizing')
+        resizeHandler()
       }
     }
 
@@ -47,10 +49,10 @@ window.onload = () => {
     /*------------------------------ first draw ----------------------------------*/
     /*----------------------------------------------------------------------------*/
 
-    /*
+
     drawCirclePacking(data)
     top10Movies(data)
-    */
+    drawScatterPlotPCA(data)
 
     /*----------------------------------------------------------------------------*/
     /*----------------------------------------------------------------------------*/

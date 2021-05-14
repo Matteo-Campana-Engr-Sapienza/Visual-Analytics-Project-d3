@@ -68,7 +68,7 @@ function top10Movies(data) {
     .append("rect")
     .attr("x", function(d) { return x(d.key); })
     .attr("width", x.bandwidth())
-    .attr("fill", "#69b3a2")
+    .attr("fill", "#B3697A")
     // no bar at the beginning thus:
     .attr("height", function(d) { return height - y(0); }) // always equal to 0
     .attr("y", function(d) { return y(0); })
@@ -140,7 +140,7 @@ function updateTop10Movies(new_data) {
     .append("rect")
     .attr("x", function(d) { return x(d.key); })
     .attr("width", x.bandwidth())
-    .attr("fill", "#69b3a2")
+    .attr("fill", "#B3697A")
     // no bar at the beginning thus:
     .attr("height", function(d) { return height - y(0); }) // always equal to 0
     .attr("y", function(d) { return y(0); })

@@ -1,11 +1,11 @@
 function computePCA(data) {
   //['budget', 'gross', 'runtime', 'score', 'votes', 'year']
 
-  var budget = data.map((d) => { return +d.budget })
-  var gross = data.map((d) => { return +d.gross })
-  var runtime = data.map((d) => { return +d.runtime })
-  var score = data.map((d) => { return +d.score })
-  var votes = data.map((d) => { return +d.votes })
+  var budget = data.map((d) => { return +d.budget || 0 })
+  var gross = data.map((d) => { return +d.gross || 0 })
+  var runtime = data.map((d) => { return +d.runtime || 0 })
+  var score = data.map((d) => { return +d.score || 0 })
+  var votes = data.map((d) => { return +d.votes || 0 })
 
   var budget_normalized = normalize(budget)
   var gross_normalized = normalize(gross)
@@ -22,8 +22,10 @@ function computePCA(data) {
       votes_normalized
     ]
   )
+
   normalized_matrix = math.transpose(normalized_matrix)
 
+  //console.log(normalized_matrix)
   var cov_matrix = [
     budget_normalized,
     gross_normalized,
@@ -35,6 +37,7 @@ function computePCA(data) {
   cov_matrix = covariance_matrix(cov_matrix)
   cov_matrix = math.matrix(cov_matrix)
   cov_matrix = math.transpose(cov_matrix)
+
 
   const ans = math.eigs(cov_matrix) // returns {values: [E1,E2...sorted], vectors: [v1,v2.... corresponding vectors as columns]}
   const eign_val = ans.values
@@ -57,12 +60,14 @@ function compute_covariance(x, y) {
   x = x.map((x) => x / x_mean)
   y = y.map((y) => y / y_mean)
 
-  return math.dot(x, y) / x.length
+  return math.dot(x, y) / x.length || 0;
 }
 
 function normalize(vector) {
-  var norm = math.norm(vector);
-  return vector.map((d) => { return d / norm })
+  var max_val = d3.max(vector)
+  var min_val = d3.min(vector)
+  var tmp = max_val - min_val
+  return vector.map((d) => { return (d - min_val) / tmp })
 }
 
 function covariance_matrix(matrix) {

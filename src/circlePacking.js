@@ -37,10 +37,16 @@ function drawCirclePacking(data) {
 
   svg.attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "0 0 " + diameter + " " + diameter + "")
+  /*
+    var color = d3.scaleLinear()
+      .domain([-1, 5])
+      .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+      .interpolate(d3.interpolateHcl);
+    */
 
   var color = d3.scaleLinear()
-    .domain([-1, 5])
-    .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+    .domain([-1, 3])
+    .range(["#69b3a2", "#388373"]) //69b3a2
     .interpolate(d3.interpolateHcl);
 
   var pack = d3.pack()
@@ -100,13 +106,19 @@ function drawCirclePacking(data) {
     });
 
   var node = g.selectAll("circle,text");
+  /*
+    svg
+      .style("background", color(-1))
+      .on("click", function() {
+        zoom(root);
+      });
+  */
 
   svg
     .style("background", color(-1))
     .on("click", function() {
       zoom(root);
     });
-
 
   zoomTo([root.x, root.y, root.r * 2 + margin]);
 
@@ -159,11 +171,13 @@ function drawCirclePacking(data) {
 
     if (ancestors.length > 0) {
       updateTop10Movies(data_to_update)
+      reDrawScatterPlotPCA(data_to_update)
     } else {
       data_to_update = data.filter((d) => {
         return +d.year > 0
       })
       updateTop10Movies(data_to_update)
+      reDrawScatterPlotPCA(data_to_update)
     }
 
     var focus0 = focus;
