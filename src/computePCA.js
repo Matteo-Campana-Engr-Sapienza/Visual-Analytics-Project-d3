@@ -44,8 +44,8 @@ function computePCA(data) {
   pc = math.transpose(pc)
 
   var result = math.multiply(normalized_matrix, pc)
+  result = result._data.map((d, index) => { return { "pca_1": d[0], "pca_2": d[1], "label": data[index] } })
   return result;
-
 }
 
 
@@ -61,8 +61,8 @@ function compute_covariance(x, y) {
 }
 
 function normalize(vector) {
-  var max_value = d3.max(vector);
-  return vector.map((d) => { return d / max_value })
+  var norm = math.norm(vector);
+  return vector.map((d) => { return d / norm })
 }
 
 function covariance_matrix(matrix) {
