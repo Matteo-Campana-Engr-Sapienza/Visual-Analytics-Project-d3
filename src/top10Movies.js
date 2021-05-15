@@ -59,7 +59,20 @@ function top10Movies(data) {
   svg.append("g")
     .attr("class", "myYaxis")
     .call(d3.axisLeft(y)
-      .tickFormat(d3.format(".2s")));
+      .tickFormat(d3.format(".2s"))
+    );
+
+  var nested_data = d3.nest()
+    .key(function(d) { return d.rating; })
+    .entries(data);
+
+  var color_range = nested_data.map((d) => { return d.key })
+  var colors_number = color_range.length
+
+
+  var myColor = d3.scaleOrdinal()
+    .domain(color_range)
+    .range(d3.schemeTableau10);
 
   // Bars
   svg.selectAll("mybar")
@@ -68,7 +81,9 @@ function top10Movies(data) {
     .append("rect")
     .attr("x", function(d) { return x(d.key); })
     .attr("width", x.bandwidth())
-    .attr("fill", "#B3697A")
+    .attr("fill", function(d) {
+      return myColor(data.filter(function(c) { return c.name == d.key })[0].rating)
+    })
     // no bar at the beginning thus:
     .attr("height", function(d) { return height - y(0); }) // always equal to 0
     .attr("y", function(d) { return y(0); })

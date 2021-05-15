@@ -57,8 +57,20 @@ function drawScatterPlotPCA(data) {
     .call(
       d3.axisLeft(y)
       .ticks(numberOfTicksTarget)
-      //.tickFormat(d3.format(".2s"))
     );
+
+
+  var nested_data = d3.nest()
+    .key(function(d) { return d.rating; })
+    .entries(data);
+
+  var color_range = nested_data.map((d) => { return d.key })
+  var colors_number = color_range.length
+
+
+  var myColor = d3.scaleOrdinal()
+    .domain(color_range)
+    .range(d3.schemeTableau10);
 
   // Add dots
   svg.append('g')
@@ -68,9 +80,11 @@ function drawScatterPlotPCA(data) {
     .append("circle")
     .attr("cx", function(d) { return x(minX) || 0; })
     .attr("cy", function(d) { return y(d.pca_2) || 0; })
-    .attr("r", 5)
-    .style("fill", "#B3697A")
+    .attr("r", 3.5)
+    .style("fill", function(d) { return myColor(d.label.rating) })
     .attr("opacity", 0.5)
+
+
 
   // Update chart
   svg.selectAll("circle")
@@ -108,7 +122,7 @@ function drawScatterPlotPCA(data) {
 
   var mousemove = function(d) {
     tooltip
-      .html("Title: " + d.label.name + "<br>Company: " + d.label.company + "<br>Director: " + d.label.director + "<br>Year: " + d.label.year + "")
+      .html("Title: " + d.label.name + "<br>Company: " + d.label.company + "<br>Director: " + d.label.director + "<br>Year: " + d.label.year + "" + "<br>rating: " + d.label.rating + "")
       .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
       .style("top", (d3.mouse(this)[1] + parentHeigth * 0.9) + "px")
   }
