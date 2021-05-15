@@ -4,7 +4,7 @@ function top10Movies(data) {
   var parentHeigth = parseInt(d3.select("#top10Movies").style("height"))
 
   // set the dimensions and margins of the graph
-  var margin = { top: 30, right: 30, bottom: 70, left: 70 },
+  var margin = { top: 30, right: 120, bottom: 70, left: 70 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
 
@@ -17,10 +17,14 @@ function top10Movies(data) {
     .attr("transform",
       "translate(" + margin.left + "," + margin.top + ")");
 
-
-  const pixelsPerTick = 30;
-  const numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
-  //console.log("numberOfTicksTarget : ", numberOfTicksTarget);
+  // text label for the y axis
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Votes");
 
 
   var processedData = d3.nest()
@@ -28,14 +32,17 @@ function top10Movies(data) {
     .rollup(function(v) { return d3.sum(v, function(d) { return d.votes; }); })
     .entries(data);
 
+  // Define beautiful axis
+  const pixelsPerTick = 30;
+  var numberOfTicksTargetX = Math.max(1, Math.floor(width / pixelsPerTick));
+  if (numberOfTicksTargetX > 10) {
+    numberOfTicksTargetX = 10;
+  }
 
   processedData.sort(function(a, b) { return d3.descending(a.value, b.value); });
-
-  processedData = processedData.slice(0, 10)
-
+  processedData = processedData.slice(0, numberOfTicksTargetX)
   processedData.slice().sort((a, b) => d3.descending(+a.value, +b.value))
-
-  processedData = processedData.slice(0, 10)
+  processedData = processedData.slice(0, numberOfTicksTargetX)
 
   const maxGross = d3.max(processedData.map((d) => +d.value));
 
@@ -97,19 +104,65 @@ function top10Movies(data) {
     .attr("height", function(d) { return height - y(d.value); })
     .delay(function(d, i) { return (i * 100) })
 
+  /*************************************************************************/
+  /*******************************   Legend  *******************************/
+  /*************************************************************************/
+
+
+  // Add one dot in the legend for each name.
+  svg.selectAll("legendDots")
+    .data(color_range)
+    .enter()
+    .append("circle")
+    .attr("cx", (width + margin.left / 2))
+    .attr("cy", function(d, i) { return margin.top + i * 18 })
+    .attr("r", 3.5)
+    .style("fill", function(d) { return myColor(d) })
+
+  // Add one dot in the legend for each name.
+  svg.selectAll("legendLabels")
+    .data(color_range)
+    .enter()
+    .append("text")
+    .attr("x", (width + 9 + margin.left / 2))
+    .attr("y", function(d, i) { return margin.top + i * 18 })
+    .style("fill", function(d) { return myColor(d) })
+    .text(function(d) { return d })
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle")
+
+  /*************************************************************************/
+  /*************************************************************************/
+
+
+
 }
 
 
 
-function updateTop10Movies(new_data) {
+function updateTop10Movies(new_data, old_data) {
+
+  var nested_data = d3.nest()
+    .key(function(d) { return d.rating; })
+    .entries(old_data);
+
+  var color_range = nested_data.map((d) => { return d.key })
+  var colors_number = color_range.length
+
+
+  var myColor = d3.scaleOrdinal()
+    .domain(color_range)
+    .range(d3.schemeTableau10);
+
 
   var parentWidth = parseInt(d3.select("#top10Movies").style("width"))
   var parentHeigth = parseInt(d3.select("#top10Movies").style("height"))
 
   // set the dimensions and margins of the graph
-  var margin = { top: 30, right: 30, bottom: 70, left: 70 },
+  var margin = { top: 30, right: 120, bottom: 70, left: 70 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
+
 
 
   var svg = d3.select("#top10Movies").select("svg").select("g")
@@ -123,8 +176,16 @@ function updateTop10Movies(new_data) {
     .rollup(function(v) { return d3.sum(v, function(d) { return d.votes; }); })
     .entries(new_data);
 
+
+  // Define beautiful axis
+  const pixelsPerTick = 30;
+  var numberOfTicksTargetX = Math.max(1, Math.floor(width / pixelsPerTick));
+  if (numberOfTicksTargetX > 10) {
+    numberOfTicksTargetX = 10;
+  }
+
   new_data.sort(function(a, b) { return d3.descending(+a.value, +b.value); });
-  new_data = new_data.slice(0, 10)
+  new_data = new_data.slice(0, numberOfTicksTargetX)
 
   // update X axis
   // X axis
@@ -155,7 +216,9 @@ function updateTop10Movies(new_data) {
     .append("rect")
     .attr("x", function(d) { return x(d.key); })
     .attr("width", x.bandwidth())
-    .attr("fill", "#B3697A")
+    .attr("fill", function(d) {
+      return myColor(old_data.filter(function(c) { return c.name == d.key })[0].rating)
+    })
     // no bar at the beginning thus:
     .attr("height", function(d) { return height - y(0); }) // always equal to 0
     .attr("y", function(d) { return y(0); })

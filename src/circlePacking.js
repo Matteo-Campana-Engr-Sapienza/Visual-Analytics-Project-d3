@@ -10,39 +10,23 @@ function drawCirclePacking(data) {
     diameter = parentWidth
   }
 
+
   var svg_offset_width = parseInt(Math.abs(parentWidth - diameter) / 2);
   var svg_offset_height = parseInt(Math.abs(parentHeight - diameter) / 2);
 
-
-  //console.log("#circle-packing-container height : " + parentHeight)
-  //console.log("#circle-packing-container width  : " + parentWidth)
-  /*
-    var svg = d3.select("svg"),
-      margin = 20,
-      diameter = +svg.attr("width"),
-      g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
-      */
-
-  //var svg = d3.select("svg").attr("width", parentWidth).attr("height", parentHeight)
 
   var svg = d3.select("#circle-packing-container")
     .append("svg")
     .attr("width", parentWidth)
     .attr("height", parentHeight)
-
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 " + diameter + " " + diameter + "")
 
   var margin = 20,
     g = svg.append("g").attr("transform", "translate(" + (diameter / 2 + svg_offset_width) + "," + (diameter / 2 + svg_offset_height) + ")");
+
   /* ---------------------------------------------------------------------- */
 
-  svg.attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + diameter + " " + diameter + "")
-  /*
-    var color = d3.scaleLinear()
-      .domain([-1, 5])
-      .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-      .interpolate(d3.interpolateHcl);
-    */
 
   var color = d3.scaleLinear()
     .domain([-1, 3])
@@ -59,7 +43,6 @@ function drawCirclePacking(data) {
     .key(function(d) { return d.genre; })
     .entries(data);
 
-  //console.log(nested_data)
   var nested_data_JSON = JSON.stringify(nested_data);
   nested_data_JSON = nested_data_JSON.replaceAll('"key"', '"name"')
   nested_data_JSON = nested_data_JSON.replaceAll('"values"', '"children"')
@@ -142,8 +125,6 @@ function drawCirclePacking(data) {
 
     var data_to_update;
 
-
-
     if (ancestors.length == 3) {
       var year = ancestors[2]
       var rating = ancestors[1]
@@ -170,13 +151,13 @@ function drawCirclePacking(data) {
     }
 
     if (ancestors.length > 0) {
-      updateTop10Movies(data_to_update)
+      updateTop10Movies(data_to_update, data)
       reDrawScatterPlotPCA(data_to_update)
     } else {
       data_to_update = data.filter((d) => {
         return +d.year > 0
       })
-      updateTop10Movies(data_to_update)
+      updateTop10Movies(data_to_update, data)
       reDrawScatterPlotPCA(data_to_update)
     }
 
@@ -194,7 +175,7 @@ function drawCirclePacking(data) {
 
     transition.selectAll("text")
       .filter(function(d) {
-        return d.parent === focus || this.style.display === "inline";
+        return d && (d.parent === focus || this.style.display === "inline");
       })
       .style("fill-opacity", function(d) {
         return d.parent === focus ? 1 : 0;

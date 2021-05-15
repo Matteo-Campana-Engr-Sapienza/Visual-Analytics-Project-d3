@@ -22,8 +22,9 @@ function drawScatterPlotPCA(data) {
 
 
   // Define beautiful axis
-  const pixelsPerTick = 30;
-  var numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
+  const pixelsPerTick = 40;
+  var numberOfTicksTargetX = Math.max(1, Math.floor(width / pixelsPerTick));
+  var numberOfTicksTargetY = Math.max(1, Math.floor(height / pixelsPerTick));
 
 
   var maxX = d3.max(data_pca.map((d) => { return d.pca_1 }))
@@ -43,7 +44,7 @@ function drawScatterPlotPCA(data) {
     .attr("transform", "translate(0," + height + ")")
     .call(
       d3.axisBottom(x)
-      .ticks(numberOfTicksTarget)
+      .ticks(numberOfTicksTargetX)
       //.tickFormat(d3.format(".2s"))
     );
 
@@ -56,7 +57,7 @@ function drawScatterPlotPCA(data) {
     .attr("class", "yAxis")
     .call(
       d3.axisLeft(y)
-      .ticks(numberOfTicksTarget)
+      .ticks(numberOfTicksTargetY)
     );
 
 
@@ -93,8 +94,6 @@ function drawScatterPlotPCA(data) {
     .duration(200)
     .attr("cx", function(d) { return x(d.pca_1) || 0; })
     .attr("cy", function(d) { return y(d.pca_2) || 0; })
-
-
 
   /* ---------------------------------------------------------------------------- */
 
@@ -142,6 +141,23 @@ function drawScatterPlotPCA(data) {
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave)
   /* ---------------------------------------------------------------------------- */
+
+  // text label for the y axis
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("PCA 2");
+
+  // text label for the x axis
+  svg.append("text")
+    .attr("transform",
+      "translate(" + (width / 2) + " ," +
+      (height + margin.top + 20) + ")")
+    .style("text-anchor", "middle")
+    .text("PCA 1");
 
 }
 
