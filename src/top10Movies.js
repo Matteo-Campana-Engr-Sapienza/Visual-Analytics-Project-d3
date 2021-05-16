@@ -141,10 +141,9 @@ function top10Movies(data) {
     .text(function(d) { return d })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle")
-    .style("font-size", "130%")
+    .style("font-size", "100%")
     .style("stroke", "#000")
     .style("stroke-opacity", 0.3)
-    .style("font-size", "1.2rem")
 
   /*************************************************************************/
   /*************************************************************************/
