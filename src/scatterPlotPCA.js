@@ -60,18 +60,19 @@ function drawScatterPlotPCA(data) {
       .ticks(numberOfTicksTargetY)
     );
 
+  /*
+    var nested_data = d3.nest()
+      .key(function(d) { return d.rating; })
+      .entries(data);
 
-  var nested_data = d3.nest()
-    .key(function(d) { return d.rating; })
-    .entries(data);
-
-  var color_range = nested_data.map((d) => { return d.key })
-  var colors_number = color_range.length
+    var color_range = nested_data.map((d) => { return d.key })
+    var colors_number = color_range.length
 
 
-  var myColor = d3.scaleOrdinal()
-    .domain(color_range)
-    .range(d3.schemeTableau10);
+    var myColor = d3.scaleOrdinal()
+      .domain(color_range)
+      .range(d3.schemeTableau10);
+      */
 
   // Add dots
   svg.append('g')
@@ -83,7 +84,7 @@ function drawScatterPlotPCA(data) {
     .attr("cy", function(d) { return y(d.pca_2) || 0; })
     .attr("r", 3.5)
     .style("fill", function(d) { return myColor(d.label.rating) })
-    .attr("opacity", 0.5)
+    .attr("opacity", 0.8)
 
 
 

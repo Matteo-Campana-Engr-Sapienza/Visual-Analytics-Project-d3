@@ -98,7 +98,7 @@ function drawCirclePacking(data) {
   */
 
   svg
-    .style("background", color(-1))
+    .style("background", "#ccc")
     .on("click", function() {
       zoom(root);
     });

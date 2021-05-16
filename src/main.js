@@ -1,7 +1,7 @@
 window.onload = () => {
 
   var storedData;
-
+  var myColor;
 
   d3.csv("../data/movies.csv", function(data) {
 

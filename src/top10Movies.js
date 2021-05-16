@@ -56,8 +56,9 @@ function top10Movies(data) {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
-    .attr("transform", "translate(30,0)rotate(-20)")
+    .attr("transform", "translate(20,0)rotate(-20)")
     .style("text-anchor", "end");
+
 
   // Add Y axis
   var y = d3.scalePow()
@@ -76,10 +77,16 @@ function top10Movies(data) {
   var color_range = nested_data.map((d) => { return d.key })
   var colors_number = color_range.length
 
+  /*
+    var myColor = d3.scaleOrdinal()
+      .domain(color_range)
+      .range(d3.schemeTableau10);
+      */
 
-  var myColor = d3.scaleOrdinal()
+  myColor = d3.scaleOrdinal()
     .domain(color_range)
     .range(d3.schemeTableau10);
+
 
   // Bars
   svg.selectAll("mybar")
@@ -134,25 +141,25 @@ function top10Movies(data) {
   /*************************************************************************/
   /*************************************************************************/
 
-
-
 }
 
 
 
 function updateTop10Movies(new_data, old_data) {
 
-  var nested_data = d3.nest()
-    .key(function(d) { return d.rating; })
-    .entries(old_data);
+  /*
+    var nested_data = d3.nest()
+      .key(function(d) { return d.rating; })
+      .entries(old_data);
 
-  var color_range = nested_data.map((d) => { return d.key })
-  var colors_number = color_range.length
+    var color_range = nested_data.map((d) => { return d.key })
+    var colors_number = color_range.length
 
 
-  var myColor = d3.scaleOrdinal()
-    .domain(color_range)
-    .range(d3.schemeTableau10);
+    var myColor = d3.scaleOrdinal()
+      .domain(color_range)
+      .range(d3.schemeTableau10);
+      */
 
 
   var parentWidth = parseInt(d3.select("#top10Movies").style("width"))
@@ -162,7 +169,6 @@ function updateTop10Movies(new_data, old_data) {
   var margin = { top: 30, right: 120, bottom: 70, left: 70 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
-
 
 
   var svg = d3.select("#top10Movies").select("svg").select("g")
@@ -206,7 +212,7 @@ function updateTop10Movies(new_data, old_data) {
   svg.select(".myXaxis")
     .call(d3.axisBottom(x))
     .selectAll("text")
-    .attr("transform", "translate(30,0)rotate(-20)")
+    .attr("transform", "translate(20,0)rotate(-20)")
     .style("text-anchor", "end");
 
   // Bars
