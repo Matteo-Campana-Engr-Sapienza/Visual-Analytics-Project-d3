@@ -4,7 +4,7 @@ function top10Movies(data) {
   var parentHeigth = parseInt(d3.select("#top10Movies").style("height"))
 
   // set the dimensions and margins of the graph
-  var margin = { top: 30, right: 120, bottom: 70, left: 70 },
+  var margin = { top: 60, right: 135, bottom: 70, left: 80 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
 
@@ -85,7 +85,7 @@ function top10Movies(data) {
 
   myColor = d3.scaleOrdinal()
     .domain(color_range)
-    .range(d3.schemeTableau10);
+    .range(d3.schemePaired);
 
 
   // Bars
@@ -111,6 +111,8 @@ function top10Movies(data) {
     .attr("height", function(d) { return height - y(d.value); })
     .delay(function(d, i) { return (i * 100) })
 
+  svg.selectAll("rect").attr("class", "bar")
+
   /*************************************************************************/
   /*******************************   Legend  *******************************/
   /*************************************************************************/
@@ -122,9 +124,11 @@ function top10Movies(data) {
     .enter()
     .append("circle")
     .attr("cx", (width + margin.left / 2))
-    .attr("cy", function(d, i) { return margin.top + i * 18 })
+    .attr("cy", function(d, i) { return parentHeigth * 0.05 + i * 18 })
     .attr("r", 3.5)
     .style("fill", function(d) { return myColor(d) })
+    .style("stroke", "#000")
+    .style("stroke-opacity", 0.3)
 
   // Add one dot in the legend for each name.
   svg.selectAll("legendLabels")
@@ -132,14 +136,25 @@ function top10Movies(data) {
     .enter()
     .append("text")
     .attr("x", (width + 9 + margin.left / 2))
-    .attr("y", function(d, i) { return margin.top + i * 18 })
+    .attr("y", function(d, i) { return parentHeigth * 0.05 + i * 18 })
     .style("fill", function(d) { return myColor(d) })
     .text(function(d) { return d })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle")
+    .style("font-size", "130%")
+    .style("stroke", "#000")
+    .style("stroke-opacity", 0.3)
+    .style("font-size", "1.2rem")
 
   /*************************************************************************/
   /*************************************************************************/
+
+  svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "130%")
+    .text("Top Movies");
 
 }
 
@@ -166,7 +181,7 @@ function updateTop10Movies(new_data, old_data) {
   var parentHeigth = parseInt(d3.select("#top10Movies").style("height"))
 
   // set the dimensions and margins of the graph
-  var margin = { top: 30, right: 120, bottom: 70, left: 70 },
+  var margin = { top: 60, right: 135, bottom: 70, left: 80 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
 

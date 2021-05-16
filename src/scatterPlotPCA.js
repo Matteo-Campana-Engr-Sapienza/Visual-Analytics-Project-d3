@@ -7,7 +7,7 @@ function drawScatterPlotPCA(data) {
   var parentHeigth = parseInt(d3.select("#scatterPlotPCA").style("height"))
 
   // set the dimensions and margins of the graph
-  var margin = { top: 30, right: 30, bottom: 30, left: 60 },
+  var margin = { top: 60, right: 30, bottom: 50, left: 70 },
     width = parentWidth - 30 - margin.left - margin.right,
     height = parentHeigth - 30 - margin.top - margin.bottom;
 
@@ -84,9 +84,7 @@ function drawScatterPlotPCA(data) {
     .attr("cy", function(d) { return y(d.pca_2) || 0; })
     .attr("r", 3.5)
     .style("fill", function(d) { return myColor(d.label.rating) })
-    .attr("opacity", 0.8)
-
-
+    .attr("opacity", 1)
 
   // Update chart
   svg.selectAll("circle")
@@ -95,6 +93,8 @@ function drawScatterPlotPCA(data) {
     .duration(200)
     .attr("cx", function(d) { return x(d.pca_1) || 0; })
     .attr("cy", function(d) { return y(d.pca_2) || 0; })
+
+  svg.selectAll("circle").attr("class", "pca-circle")
 
   /* ---------------------------------------------------------------------------- */
 
@@ -156,9 +156,17 @@ function drawScatterPlotPCA(data) {
   svg.append("text")
     .attr("transform",
       "translate(" + (width / 2) + " ," +
-      (height + margin.top + 20) + ")")
+      (height + margin.top + 10) + ")")
     .style("text-anchor", "middle")
     .text("PCA 1");
+
+
+  svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "130%")
+    .text("Principal Component Analysis");
 
 }
 

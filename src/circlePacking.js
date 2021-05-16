@@ -30,8 +30,8 @@ function drawCirclePacking(data) {
 
   var color = d3.scaleLinear()
     .domain([-1, 3])
-    .range(["#69b3a2", "#388373"]) //69b3a2
-    .interpolate(d3.interpolateHcl);
+    .range(["#e3f2fd", "#2286c3"])
+    .interpolate(d3.interpolateHcl)
 
   var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
@@ -98,7 +98,6 @@ function drawCirclePacking(data) {
   */
 
   svg
-    .style("background", "#ccc")
     .on("click", function() {
       zoom(root);
     });
